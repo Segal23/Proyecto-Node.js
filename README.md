@@ -110,7 +110,6 @@ A continuación, ejemplos de cómo configurar cada request en Postman:
 
 ### 8. Agregar producto a carrito
 - **POST** `http://localhost:8080/api/carts/:cid/product/:pid`
-```
 
 
 ## 💾 Persistencia
@@ -118,13 +117,13 @@ A continuación, ejemplos de cómo configurar cada request en Postman:
 - Los datos se almacenan en:
   - `src/data/products.json`
   - `src/data/carts.json`
-- La lógica de lectura y escritura está encapsulada en los archivos:
+
+- La lógica de lectura y escritura está encapsulada en:
   - `ProductManager.js`
   - `CartManager.js`
 
-
 ## 📌 Notas
 
-- El ID se genera es secuencial y autogenerado para evitar duplicados.
+- El ID es secuencial y autogenerado para evitar duplicados.
 - No se usa base de datos: todo se guarda en archivos locales `.json`.
 - El proyecto es modular y escalable para futuras integraciones.
