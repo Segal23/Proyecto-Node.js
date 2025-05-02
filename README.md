@@ -93,23 +93,18 @@ A continuación, ejemplos de cómo configurar cada request en Postman:
 ### 5. Eliminar producto
 - **DELETE** `http://localhost:8080/api/products/:pid`
 
-### 6. Crear carrito
+### 6. Crear carrito vacío
 - **POST** `http://localhost:8080/api/carts`
 - **Headers**: `Content-Type: application/json`
-- **Body opcional** (raw, JSON):
-  ```json
-  {
-    "products": [
-      { "product": "1", "quantity": 2 }
-    ]
-  }
-  ```
+- **Body**: *(dejar vacío)*
 
 ### 7. Obtener carrito por ID
 - **GET** `http://localhost:8080/api/carts/:cid`
 
-### 8. Agregar producto a carrito
+### 8.. Agregar producto a carrito
 - **POST** `http://localhost:8080/api/carts/:cid/product/:pid`
+- **Headers**: `Content-Type: application/json`
+- **Body**: *(dejar vacío)*
 
 
 ## 💾 Persistencia
