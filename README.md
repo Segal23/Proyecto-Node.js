@@ -27,6 +27,7 @@ ecommerce-api/
 │       └── carts.router.js
 ```
 
+
 ## 🧠 Funcionalidades
 
 ### 📦 Productos (`/api/products`)
@@ -40,6 +41,68 @@ ecommerce-api/
 - `POST /` – Crear carrito vacío
 - `GET /:cid` – Ver productos de un carrito
 - `POST /:cid/product/:pid` – Agregar producto (o aumentar cantidad) al carrito
+
+
+## 🔧 Peticiones de Postman
+
+A continuación, ejemplos de cómo configurar cada request en Postman:
+
+### 1. Listar productos
+- **GET** `http://localhost:8080/api/products`
+
+### 2. Obtener producto por ID
+- **GET** `http://localhost:8080/api/products/:pid`
+
+### 3. Crear producto
+- **POST** `http://localhost:8080/api/products`
+- **Headers**: `Content-Type: application/json`
+- **Body** (raw, JSON):
+  ```json
+  {
+    "title": "Producto Ejemplo",
+    "description": "Descripción",
+    "code": "COD123",
+    "price": 100,
+    "status": true,
+    "stock": 10,
+    "category": "categoria",
+    "thumbnails": ["https://example.com/img.jpg"]
+  }
+  ```
+
+### 4. Actualizar producto
+- **PUT** `http://localhost:8080/api/products/:pid`
+- **Headers**: `Content-Type: application/json`
+- **Body** (raw, JSON):
+  ```json
+  {
+    "price": 120,
+    "stock": 15
+  }
+  ```
+
+### 5. Eliminar producto
+- **DELETE** `http://localhost:8080/api/products/:pid`
+
+### 6. Crear carrito
+- **POST** `http://localhost:8080/api/carts`
+- **Headers**: `Content-Type: application/json`
+- **Body opcional** (raw, JSON):
+  ```json
+  {
+    "products": [
+      { "product": "1", "quantity": 2 }
+    ]
+  }
+  ```
+
+### 7. Obtener carrito por ID
+- **GET** `http://localhost:8080/api/carts/:cid`
+
+### 8. Agregar producto a carrito
+- **POST** `http://localhost:8080/api/carts/:cid/product/:pid`
+```
+
 
 ## 💾 Persistencia
 
