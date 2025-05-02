@@ -43,6 +43,15 @@ ecommerce-api/
 - `POST /:cid/product/:pid` – Agregar producto (o aumentar cantidad) al carrito
 
 
+## 🧪 Cómo probar
+
+Usá Postman o similar para hacer peticiones a:
+
+```
+http://localhost:8080/api/products
+http://localhost:8080/api/carts
+```
+
 ## 🔧 Peticiones de Postman
 
 A continuación, ejemplos de cómo configurar cada request en Postman:
@@ -113,14 +122,6 @@ A continuación, ejemplos de cómo configurar cada request en Postman:
   - `ProductManager.js`
   - `CartManager.js`
 
-## 🧪 Cómo probar
-
-Usá Postman o similar para hacer peticiones a:
-
-```
-http://localhost:8080/api/products
-http://localhost:8080/api/carts
-```
 
 ## 📌 Notas
 
