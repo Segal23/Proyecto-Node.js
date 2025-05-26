@@ -1,0 +1,85 @@
+body{
+    background-color: #CFE0E0;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+    margin: 50px 100px;
+}
+
+.container-home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h1{
+        margin-bottom: 50px;
+        color: #10153D;
+    }
+}
+
+.realTimeProducts-h1{
+    color: #10153D;
+    justify-self: center;
+    margin-bottom: 50px;
+}
+
+.container-products{
+    width: 100%;
+    padding: 0 10px;
+    margin: 50px 0;
+    justify-self: center;
+    border: 1px solid #3b5fc055;
+    background-color: #5DD8E0;
+    .header-row{
+        padding: 5px 0;
+        border-bottom: 1px solid #3b5fc055;
+        font-weight: bold;
+    }
+
+    .item-row{
+        padding: 5px 0;
+        font-size: 14px;
+        button{
+            border: 0px solid #FFF0;
+            height: 25px;
+            width: 25px ;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FFF0;
+        }
+    }
+}
+
+h3{
+    color: #10153D;
+    margin-top: 100px;
+    justify-self: center;
+}
+
+.container{
+    border: 1px solid #3b5fc055;
+    background-color: #5DD8E0;
+    form{
+        max-width: 900px;
+        font-size: 14px;
+        label{
+            font-weight: bold;
+        }
+        span{
+            color: #FF0000;
+            font-weight: bold;
+        }
+        button{
+            width: 200px;
+            height: 50px;
+            background-color: #8ed1d1;
+            &:hover{
+                background-color: #2f5757;
+                color: #FFFFFF;
+            }
+        }
+    }
+}
+
+#error-message{
+    justify-self: center;
+    color: #FF0000;
+}

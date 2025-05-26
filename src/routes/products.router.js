@@ -1,49 +1,77 @@
 import { Router } from 'express';
-import ProductManager from '../managers/ProductManager.js';
+import {
+    getAllProducts,
+    getProductById,
+    addProduct,
+    updateProduct,
+    deleteProduct
+    } from '../services/product.service.js';
 
 const router = Router();
-const productManager = new ProductManager('src/data/products.json');
-
 
 router.get('/', async (req, res) => {
-    const products = await productManager.getAllProducts();
-    products 
-        ? res.json(products)
-        : res.status(500).json({code: 500, message: "Internal server error"});
+    try {
+        const products = await getAllProducts();
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener los productos' });
+    }
 });
-
 
 router.get('/:pid', async (req, res) => {
-    const product = await productManager.getProductById(req.params.pid);
-    product 
-        ? res.json(product) 
-        : res.status(404).json({ code: 404, error: 'Producto no encontrado' });
+    try {
+        const product = await getProductById(req.params.pid);
+        if (!product) {
+        return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        res.json(product);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener el producto' });
+    }
 });
-
 
 router.post('/', async (req, res) => {
-    const newProduct = await productManager.addProduct(req.body);
-    newProduct 
-        ? res.status(201).json(newProduct) 
-        : res.status(500).json({code: 500, message: "Internal server error"});
-});
+    try {
+        const newProduct = await addProduct(req.body);
+        if (!newProduct) {
+            return res.status(400).json({ message: 'Datos inválidos o incompletos' });
+        }
 
+        const allProducts = await getAllProducts();
+        req.app.locals.io.emit('update-products', allProducts);
+
+        res.status(201).json(newProduct);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al crear el producto' });
+    }
+});
 
 router.put('/:pid', async (req, res) => {
-    const updated = await productManager.updateProduct(req.params.pid, req.body);
-    updated 
-        ? res.json(updated) 
-        : res.status(404).json({code: 404, error: 'Producto no encontrado' });
+    try {
+        const updated = await updateProduct(req.params.pid, req.body);
+        if (!updated) {
+        return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        res.json(updated);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al actualizar el producto' });
+    }
 });
-
 
 router.delete('/:pid', async (req, res) => {
-    const deleted = await productManager.deleteProduct(req.params.pid);
-    
-    deleted 
-        ? res.status(200).json({code: 200, message: `El producto con Id: ${req.params.pid} ha sido eliminado`}) 
-        : res.status(404).json({code: 404, error: 'Producto no encontrado' });
-});
+    try {
+        const deleted = await deleteProduct(req.params.pid);
+        if (!deleted) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
 
+        const allProducts = await getAllProducts();
+        req.app.locals.io.emit('update-products', allProducts);
+
+        res.json({ message: `Producto con ID ${req.params.pid} eliminado` });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al eliminar el producto' });
+    }
+});
 
 export default router;

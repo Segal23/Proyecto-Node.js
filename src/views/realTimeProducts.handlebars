@@ -1,0 +1,99 @@
+<h1 class="realTimeProducts-h1">Productos en Tiempo Real</h1>
+<div id="container-products" class="container-products">
+    <div class="row header-row">
+        <div class="col col-md-1">
+            Eliminar
+        </div>
+        <div class="col col-md-3">
+            Título
+        </div>
+        <div class="col col-md-5">
+            Descripción
+        </div>
+        <div class="col col-md-2">
+            Precio
+        </div>
+        <div class="col col-md-1">
+            Stock
+        </div>
+    </div>
+    {{#each products}}
+        <div class="row item-row">
+            <div class="col col-md-1">
+                <button onclick="deleteProduct('{{this.id}}')">❌</button>
+            </div>
+            <div class="col col-md-3">
+                {{this.title}}
+            </div>
+            <div class="col col-md-5">
+                {{this.description}}
+            </div>
+            <div class="col col-md-2">
+                ${{this.price}}
+            </div>
+            <div class="col col-md-1">
+                {{this.stock}}
+            </div>
+        </div>
+    {{/each}}
+</div>
+
+
+<h3>Registar Nuevo Producto</h3>
+
+<div class="container d-flex justify-content-center">
+    <form id="product-form" class="row g-3 mt-5 mb-5">
+        <div class="col-md-4">
+            <label for="title" class="form-label">Título<span>*</span></label>
+            <input type="text" class="form-control" id="title" name="title">
+        </div>
+
+        <div class="col-md-8">
+            <label for="description" class="form-label">Descripción<span>*</span></label>
+            <input type="text" class="form-control" id="description" name="description">
+        </div>
+
+        <div class="col-md-4">
+            <label for="code" class="form-label">Código<span>*</span></label>
+            <input type="text" class="form-control" id="code" name="code">
+        </div>
+
+        <div class="col-md-4">
+            <label for="price" class="form-label">Precio<span>*</span></label>
+            <input type="number" class="form-control" id="price" name="price">
+        </div>
+
+        <div class="col-md-4">
+            <label for="status" class="form-label">Estado<span>*</span></label>
+            <select class="form-select" id="status" name="status">
+                <option value="true">Activo</option>
+                <option value="false">Inactivo</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label for="stock" class="form-label">Stock<span>*</span></label>
+            <input type="number" class="form-control" id="stock" name="stock">
+        </div>
+
+        <div class="col-md-2">
+            <label for="category" class="form-label">Categoría<span>*</span></label>
+            <input type="text" class="form-control" id="category" name="category">
+        </div>
+
+        <div class="col-md-8">
+            <label for="thumbnails" class="form-label">URL de la Imagen</label>
+            <input type="url" class="form-control" id="thumbnails" name="thumbnails">
+        </div>
+
+        <div class="col-12 text-center mt-3 mb-3">
+            <button type="submit">Agregar Producto</button>
+        </div>
+    </form>
+</div>
+
+
+<p id="error-message"></p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtime.js"></script>

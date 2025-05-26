@@ -1,28 +1,43 @@
 import { Router } from 'express';
-import CartManager from '../managers/CartManager.js';
+import {
+    createCart,
+    getCartById,
+    addProductToCart
+    } from '../services/cart.service.js';
 
 const router = Router();
-const cartManager = new CartManager('src/data/carts.json');
 
 router.post('/', async (req, res) => {
-    const cart = await cartManager.createCart();
-    cart 
-        ? res.status(201).json(cart)
-        : res.status(500).json({code: 500, message: "Internal server error"});
+    try {
+        const newCart = await createCart();
+        res.status(201).json(newCart);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al crear el carrito' });
+    }
 });
 
 router.get('/:cid', async (req, res) => {
-    const cart = await cartManager.getCartById(req.params.cid);
-    cart 
-        ? res.json(cart) 
-        : res.status(404).json({code: 404, message: 'Carrito no encontrado' });
+    try {
+        const cart = await getCartById(req.params.cid);
+        if (!cart) {
+        return res.status(404).json({ message: 'Carrito no encontrado' });
+        }
+        res.json(cart);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener el carrito' });
+    }
 });
 
 router.post('/:cid/product/:pid', async (req, res) => {
-    const updatedCart = await cartManager.addProductToCart(req.params.cid, req.params.pid);
-    updatedCart 
-        ? res.json(updatedCart) 
-        : res.status(404).json({code: 404, message: 'Carrito no encontrado' });
+    try {
+        const updatedCart = await addProductToCart(req.params.cid, req.params.pid);
+        if (!updatedCart) {
+        return res.status(404).json({ message: 'Carrito no encontrado o producto inválido' });
+        }
+        res.json(updatedCart);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al agregar el producto al carrito' });
+    }
 });
 
 export default router;
