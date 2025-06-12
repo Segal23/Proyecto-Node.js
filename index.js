@@ -1,7 +1,6 @@
 import app from './src/app.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-// import ProductManager from './src/managers/ProductManager.js';
 import { ProductModel } from './src/models/Product.model.js';
 import { connectDB } from './src/db/db.js';
 
@@ -9,8 +8,6 @@ const httpServer = createServer(app);
 const io = new Server(httpServer);
 
 app.setSocket(io);
-
-// const productManager = new ProductManager('src/data/products.json');
 
 io.on('connection', (socket) => {
     console.log('Cliente conectado');

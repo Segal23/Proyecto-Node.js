@@ -40,7 +40,7 @@ function deleteProduct(productId) {
     })
     .then(res => {
         if (res.ok) {
-            location.reload(); // recarga para reflejar cambios
+            location.reload();
         } else {
             alert('Error al eliminar producto');
         }

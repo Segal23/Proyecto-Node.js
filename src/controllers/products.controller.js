@@ -6,7 +6,6 @@ import {
   getProductById as serviceGetProductById
 } from '../services/product.service.js';
 
-// GET /api/products
 export const getAllProducts = async (req, res) => {
   try {
     const { limit, page, sort, query } = req.query;
@@ -29,7 +28,6 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
-// GET /api/products/:pid
 export const getProductById = async (req, res) => {
   try {
     const product = await serviceGetProductById(req.params.pid);
@@ -42,7 +40,6 @@ export const getProductById = async (req, res) => {
   }
 };
 
-// POST /api/products
 export const createProduct = async (req, res) => {
   try {
     const newProduct = await serviceCreateProduct(req.body);
@@ -52,7 +49,6 @@ export const createProduct = async (req, res) => {
   }
 };
 
-// DELETE /api/products/:pid
 export const deleteProduct = async (req, res) => {
   try {
     const deleted = await serviceDeleteProduct(req.params.pid);
@@ -65,7 +61,6 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-// PUT /api/products/:pid
 export const updateProduct = async (req, res) => {
   try {
     const updated = await serviceUpdateProduct(req.params.pid, req.body);

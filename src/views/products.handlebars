@@ -92,7 +92,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
-        // Botón de ir al carrito
         document.getElementById('cart-link').addEventListener('click', async (e) => {
             e.preventDefault();
             const cartId = await getCartId();
@@ -103,7 +102,6 @@
             }
         });
 
-        // Agregar producto al carrito
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
                 const productId = btn.dataset.id;
@@ -127,7 +125,6 @@
             });
         });
 
-        // Eliminar producto del carrito
         document.querySelectorAll('.remove-from-cart-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
                 const productId = btn.dataset.id;
@@ -147,7 +144,6 @@
             });
         });
 
-        // Actualizar contador al iniciar
         getCartId().then(cartId => {
             if (cartId) updateCartCount(cartId);
         });
