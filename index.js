@@ -1,34 +1,45 @@
 import app from './src/app.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import ProductManager from './src/managers/ProductManager.js'; // ¡IMPORTANTE!
+// import ProductManager from './src/managers/ProductManager.js';
+import { ProductModel } from './src/models/Product.model.js';
+import { connectDB } from './src/db/db.js';
 
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
 app.setSocket(io);
 
-const productManager = new ProductManager('src/data/products.json');
-
+// const productManager = new ProductManager('src/data/products.json');
 
 io.on('connection', (socket) => {
     console.log('Cliente conectado');
 
-
     socket.on('new-product', async (product) => {
-        await productManager.addProduct(product);
-        const updatedProducts = await productManager.getAllProducts();
-        io.emit('update-products', updatedProducts);
+        try {
+            await ProductModel.create(product);
+            const updatedProducts = await ProductModel.find().lean();
+            io.emit('update-products', updatedProducts);
+        } catch (error) {
+            console.error('Error al agregar producto con socket:', error.message);
+        }
     });
 
     socket.on('delete-product', async (id) => {
-        await productManager.deleteProduct(id);
-        const updatedProducts = await productManager.getAllProducts();
-        io.emit('update-products', updatedProducts);
+        try {
+            await ProductModel.findByIdAndDelete(id);
+            const updatedProducts = await ProductModel.find().lean();
+            io.emit('update-products', updatedProducts);
+        } catch (error) {
+            console.error('Error al eliminar producto con socket:', error.message);
+        }
     });
 });
 
 const PORT = 8080;
-httpServer.listen(PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`);
+
+connectDB().then(() => {
+    httpServer.listen(PORT, () => {
+        console.log(`Servidor corriendo en puerto ${PORT}`);
+    });
 });

@@ -4,7 +4,7 @@ body{
     margin: 50px 100px;
 }
 
-.container-home{
+/* .container-home{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,9 +12,9 @@ body{
         margin-bottom: 50px;
         color: #10153D;
     }
-}
+} */
 
-.realTimeProducts-h1{
+.realTimeProducts-h1, .Products-h1, .cart-h1{
     color: #10153D;
     justify-self: center;
     margin-bottom: 50px;
@@ -82,4 +82,27 @@ h3{
 #error-message{
     justify-self: center;
     color: #FF0000;
+}
+
+.item-row{
+    .col{
+        display: flex;
+    }
+}
+
+.cart-button{
+    border: 1px solid #EE82EE;
+    color: #98008B;
+    &:hover{
+        background-color: #EE82EE55;
+        color: #98008B; 
+    }
+}
+
+.cart-table{
+    margin-top: 100px;
+}
+
+.backTopProducts-link{
+    margin-top: 50px;
 }

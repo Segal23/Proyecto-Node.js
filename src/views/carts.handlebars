@@ -1,0 +1,50 @@
+<h1 class="cart-h1">🛒 Carrito de Compras</h1>
+
+{{#if cart.products.length}}
+    <div id="container-products" class="container-products">
+        <div class="row header-row">
+            <div class="col col-md-3">Título</div>
+            <div class="col col-md-5">Descripción</div>
+            <div class="col col-md-1">Precio</div>
+            <div class="col col-md-1">Cantidad</div>
+            <div class="col col-md-1">Total</div>
+            <div class="col col-md-1">Acciones</div>
+        </div>
+
+        {{#each cart.products}}
+        <div class="row item-row">
+            <div class="col col-md-3">{{product.title}}</div>
+            <div class="col col-md-5">{{product.description}}</div>
+            <div class="col col-md-1">${{product.price}}</div>
+            <div class="col col-md-1">{{quantity}}</div>
+            <div class="col col-md-1">${{multiply product.price quantity}}</div>
+            <div class="col col-md-1">
+                <button onclick="deleteProduct('{{product._id}}')">❌</button>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+{{else}}
+    <p>Tu carrito está vacío.</p>
+{{/if}}
+
+<p class="backTopProducts-link"><a href="/products">⬅️ Volver a productos</a></p>
+
+<script>
+function deleteProduct(productId) {
+    const cartId = localStorage.getItem('cartId');
+    if (!cartId) return alert('No hay carrito activo');
+
+    fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: 'DELETE'
+    })
+    .then(res => {
+        if (res.ok) {
+            location.reload(); // recarga para reflejar cambios
+        } else {
+            alert('Error al eliminar producto');
+        }
+    })
+    .catch(err => console.error('Error:', err));
+}
+</script>

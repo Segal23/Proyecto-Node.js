@@ -1,0 +1,155 @@
+<h1 class="Products-h1">Lista de Productos</h1>
+
+<div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+    <a href="#" id="cart-link">
+        <button class="cart-button">🛒 Carrito (<span id="cart-count">0</span>)</button>
+    </a>
+</div>
+
+<div id="container-products" class="container-products">
+    <div class="row header-row">
+        <div class="col col-md-1">
+            Carrito
+        </div>
+        <div class="col col-md-3">
+            Título
+        </div>
+        <div class="col col-md-5">
+            Descripción
+        </div>
+        <div class="col col-md-2">
+            Precio
+        </div>
+        <div class="col col-md-1">
+            Stock
+        </div>
+    </div>
+    {{#each products}}
+        <div class="row item-row">
+            <div class="col col-md-1">
+                {{#if (and (gt this.stock 0) this.status)}}
+                    <button class="add-to-cart-btn" data-id="{{_id}}">➕</button>
+                    <button class="remove-from-cart-btn" data-id="{{_id}}">➖</button>
+                {{else}}
+                    <button disabled title="Producto sin stock o deshabilitado" class="add-to-cart-btn" data-id="{{_id}}">➕</button>
+                    <button disabled title="Producto sin stock o deshabilitado" class="remove-from-cart-btn" data-id="{{_id}}">➖</button>
+                {{/if}}
+            </div>
+            <div class="col col-md-3">
+                {{this.title}}
+            </div>
+            <div class="col col-md-5">
+                {{this.description}}
+            </div>
+            <div class="col col-md-2">
+                ${{this.price}}
+            </div>
+            <div class="col col-md-1">
+                {{this.stock}}
+            </div>
+        </div>
+    {{/each}}
+</div>
+
+<div style="margin-top: 1rem;">
+    {{#if pagination.hasPrevPage}}
+        <a href="/products?page={{pagination.prevPage}}">Anterior</a>
+    {{/if}}
+    <span>Página {{pagination.page}} de {{pagination.totalPages}}</span>
+    {{#if pagination.hasNextPage}}
+        <a href="/products?page={{pagination.nextPage}}">Siguiente</a>
+    {{/if}}
+</div>
+
+<script>
+    async function getCartId() {
+        let cartId = localStorage.getItem('cartId');
+        if (!cartId) {
+            try {
+                const res = await fetch('/api/carts', { method: 'POST' });
+                const data = await res.json();
+                if (res.ok && data.cartId) {
+                    cartId = data.cartId;
+                    localStorage.setItem('cartId', cartId);
+                }
+            } catch (err) {
+                console.error('Error al crear el carrito:', err);
+            }
+        }
+        return cartId;
+    }
+
+    async function updateCartCount(cartId) {
+        try {
+            const res = await fetch(`/api/carts/${cartId}`);
+            const data = await res.json();
+            const total = data.cart?.products?.reduce((acc, p) => acc + p.quantity, 0) || 0;
+            document.getElementById('cart-count').innerText = total;
+        } catch (err) {
+            console.error('Error al actualizar el contador del carrito:', err);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Botón de ir al carrito
+        document.getElementById('cart-link').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const cartId = await getCartId();
+            if (cartId) {
+                window.location.href = `/carts/${cartId}`;
+            } else {
+                alert('No se pudo obtener el carrito');
+            }
+        });
+
+        // Agregar producto al carrito
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const productId = btn.dataset.id;
+                const cartId = await getCartId();
+                if (!cartId) {
+                    alert('No se pudo obtener el carrito');
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`/api/carts/${cartId}/product/${productId}`, { method: 'POST' });
+                    if (res.ok) {
+                        await updateCartCount(cartId);
+                    } else {
+                        const error = await res.json();
+                        alert(`Error: ${error.message}`);
+                    }
+                } catch (err) {
+                    console.error('Error al agregar producto:', err);
+                }
+            });
+        });
+
+        // Eliminar producto del carrito
+        document.querySelectorAll('.remove-from-cart-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const productId = btn.dataset.id;
+                const cartId = localStorage.getItem('cartId');
+                if (!cartId) return alert('No hay carrito activo');
+
+                try {
+                    const res = await fetch(`/api/carts/${cartId}/products/${productId}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        updateCartCount(cartId);
+                    } else {
+                        alert('Error al eliminar producto');
+                    }
+                } catch (err) {
+                    console.error('Error al eliminar producto:', err);
+                }
+            });
+        });
+
+        // Actualizar contador al iniciar
+        getCartId().then(cartId => {
+            if (cartId) updateCartCount(cartId);
+        });
+    });
+</script>
